@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "package": "org.mesdag.custom_chest_name.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "BaseContainerBlockEntityAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+    },
+    "client": [
+        "AbstractContainerScreenMixin"
+    ]
+}

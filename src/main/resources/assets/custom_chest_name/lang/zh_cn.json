@@ -1,0 +1,6 @@
+{
+    "custom_chest_name.configuration.displayMode": "决定何时在HUD中显示容器名称",
+    "custom_chest_name.display_mode.never": "永不渲染",
+    "custom_chest_name.display_mode.always": "一直渲染",
+    "custom_chest_name.display_mode.not_default": "不是默认"
+}

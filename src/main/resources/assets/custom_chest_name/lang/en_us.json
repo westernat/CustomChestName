@@ -1,0 +1,6 @@
+{
+    "custom_chest_name.configuration.displayMode": "Decide when to display the container name in the HUD.",
+    "custom_chest_name.display_mode.never": "Never",
+    "custom_chest_name.display_mode.always": "Always",
+    "custom_chest_name.display_mode.not_default": "Not Default"
+}
