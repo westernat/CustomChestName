@@ -1,10 +1,12 @@
 package org.mesdag.custom_chest_name;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -77,10 +79,12 @@ public class CustomChestNameClient {
                         PacketDistributor.sendToServer(new RequestNamePacketC2S(blockPos));
                     }
                     if (name != null && displayMode.get().shouldDisplay(blockEntity)) {
+                        RenderSystem.setShaderColor(1,1,1,0.7F);
                         Font font = minecraft.font;
                         int x = guiGraphics.guiWidth() / 2 + 10;
                         int y = guiGraphics.guiHeight() / 2 + 7;
                         guiGraphics.renderTooltip(font, name, x, y);
+                        RenderSystem.setShaderColor(1,1,1,1);
                     }
                 }
             } else {
@@ -155,6 +159,22 @@ public class CustomChestNameClient {
                 if (name == null || blockEntity.getLevel() == null) return false;
                 Component defaultName = RequestNamePacketC2S.getDefaultName(blockEntity.getLevel(), blockEntity.getBlockPos(), blockEntity);
                 return !name.getString().equals(defaultName.getString());
+            }
+        },
+        IS_CROUCHING {
+            @Override
+            public boolean shouldDisplay(ChestBlockEntity blockEntity) {
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (player == null) return false;
+                return player.isCrouching();
+            }
+        },
+        IS_CROUCHING_AND_NOT_DEFAULT {
+            @Override
+            public boolean shouldDisplay(ChestBlockEntity blockEntity) {
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (player == null) return false;
+                return player.isCrouching() && NOT_DEFAULT.shouldDisplay(blockEntity);
             }
         };
 
