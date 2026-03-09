@@ -1,11 +1,13 @@
 package org.mesdag.custom_chest_name;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -70,10 +72,12 @@ public class CustomChestNameClient {
                             );
                         }
                         if (name != null && displayMode.get().shouldDisplay(blockEntity)) {
+                            RenderSystem.setShaderColor(1,1,1,0.7F);
                             Font font = minecraft.font;
                             int x = screenWidth / 2 + 10;
                             int y = screenHeight / 2 + 7;
                             guiGraphics.renderTooltip(font, name, x, y);
+                            RenderSystem.setShaderColor(1,1,1,1);
                         }
                     }
                 } else {
@@ -174,6 +178,20 @@ public class CustomChestNameClient {
                 if (name == null || blockEntity.getLevel() == null) return false;
                 Component defaultName = RequestNamePacketC2S.getDefaultName(blockEntity.getLevel(), blockEntity.getBlockPos(), blockEntity);
                 return !name.getString().equals(defaultName.getString());
+            }
+        },
+        IS_CROUCHING {
+            @Override
+            public boolean shouldDisplay(ChestBlockEntity blockEntity) {
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (player == null) return false;
+                return player.isCrouching();
+            }
+        },
+        IS_CROUCHING_AND_NOT_DEFAULT {
+            @Override
+            public boolean shouldDisplay(ChestBlockEntity blockEntity) {
+                return IS_CROUCHING.shouldDisplay(blockEntity) && NOT_DEFAULT.shouldDisplay(blockEntity);
             }
         };
 
